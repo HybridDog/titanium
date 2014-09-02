@@ -1,5 +1,5 @@
 ---
----Titanium Mod Version 2 By Aqua. Be nice this is my first mod!!! 
+---Titanium Mod Version 3 By Aqua. Check Out Jordach's Original And Awesome TV Mod. Be nice this is my first mod!!! 
 ---
 
 ---
@@ -26,12 +26,12 @@ minetest.register_node( "titanium:block", {
 minetest.register_node("titanium:glass", {
 	description = "Titanium Glass",
 	drawtype = "glasslike",
-	tile_images = {"titanium_cleanglass.png"},
+	tile_images = {"titanium_glass.png"},
 	light_propagates = true,
 	paramtype = "light",
 	sunlight_propagates = true,
 	is_ground_content = true,
-	groups = {snappy=2,cracky=3,oddly_breakable_by_hand=3},
+	groups = {snappy=1,cracky=2,oddly_breakable_by_hand=2},
 	sounds = default.node_sound_glass_defaults(),
 })
 
@@ -41,6 +41,56 @@ minetest.register_craftitem( "titanium:titanium", {
 	on_place_on_ground = minetest.craftitem_place_item,
 })
 
+minetest.register_craftitem( "titanium:tougher_titanium", {
+	description = "Tougher Titanium",
+	inventory_image = "tougher_titanium.png",
+	on_place_on_ground = minetest.craftitem_place_item,
+})
+
+minetest.register_node( "titanium:titanium_plate", {
+	description = "Titanium Plate",
+	tile_images = { "titanium_plate.png" },
+	is_ground_content = true,
+	groups = {cracky=1},
+	sounds = default.node_sound_stone_defaults(),
+})
+
+minetest.register_node( "titanium:titanium_tv_1", {
+	description = "Titanium TV",
+	tile_images = { "titanium_tv_1.png" },
+	is_ground_content = true,
+	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
+	drop = 'titanium:screen_1',
+	light_source = 8,
+})
+
+minetest.register_node( "titanium:titanium_tv_2", {
+	description = "Titanium TV",
+	tile_images = { "titanium_tv_2.png" },
+	is_ground_content = true,
+	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
+	drop = 'titanium:screen_1',
+	light_source = 8,
+})
+
+minetest.register_abm(
+        {nodenames = {"titanium:titanium_tv_1", "titanium:titanium_tv_2"}, 
+        interval = 12,
+        chance = 1,
+        action = function(pos)
+		local i = math.random(1,2)
+        
+			if i== 1 then
+				minetest.env:add_node(pos,{name="titanium:titanium_tv_1"})
+			end
+		
+			if i== 2 then
+				minetest.env:add_node(pos,{name="titanium:titanium_tv_2"})
+			end
+			
+       end 
+})
+			
 ---
 ---tools
 ---
@@ -52,8 +102,8 @@ minetest.register_tool("titanium:sword", {
 		full_punch_interval = 1.0,
 		max_drop_level=1,
 		groupcaps={
-			fleshy={times={[1]=2.00, [2]=0.60, [3]=0.30}, uses=1000, maxlevel=2},
-			snappy={times={[2]=0.70, [3]=0.30}, uses=1000, maxlevel=1},
+			fleshy={times={[1]=2.00, [2]=0.60, [3]=0.20}, uses=1000, maxlevel=2},
+			snappy={times={[2]=0.60, [3]=0.20}, uses=1000, maxlevel=1},
 			choppy={times={[3]=0.70}, uses=1000, maxlevel=0}
 		}
 	}
@@ -137,7 +187,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = 'titanium:block 2',
+	output = 'titanium:block',
 	recipe = {
 		{'titanium:titanium', 'titanium:titanium', 'titanium:titanium'},
 		{'titanium:titanium', 'titanium:titanium', 'titanium:titanium'},
@@ -153,11 +203,37 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = 'titanium:glass 2',
+	output = 'titanium:glass 3',
 	recipe = {
 		{'', 'titanium:titanium', ''},
 		{'titanium:titanium', 'default:glass', 'titanium:titanium'},
 		{'', 'titanium:titanium', ''},
+	}
+})
+
+minetest.register_craft({
+	output = 'titanium:tougher_titanium',
+	recipe = {
+		{'titanium:titanium', 'titanium:titanium'},
+		{'titanium:titanium', 'titanium:titanium'},
+	}
+})
+
+minetest.register_craft({
+	output = 'titanium:titanium_tv_1',
+	recipe = {
+		{'default:steel_ingot', 'titanium:tougher_titanium', 'default:steel_ingot'},
+		{'titanium:tougher_titanium', 'default:glass', 'titanium:tougher_titanium'},
+		{'default:steel_ingot', 'titanium:tougher_titanium', 'default:steel_ingot'},
+	}
+})
+
+minetest.register_craft({
+	output = 'titanium:titanium_plate 9',
+	recipe = {
+		{'titanium:titanium', 'titanium:titanium', 'titanium:titanium'},
+		{'titanium:titanium', 'titanium:tougher_titanium', 'titanium:titanium'},
+		{'titanium:titanium', 'titanium:titanium', 'titanium:titanium'},
 	}
 })
 
@@ -202,5 +278,5 @@ local function generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, 
 end
 
 minetest.register_on_generated(function(minp, maxp, seed)
-generate_ore("titanium:titanium_in_ground", "default:stone", minp, maxp, seed+21,   1/8/8/8,    4, -31000,  -400)
+generate_ore("titanium:titanium_in_ground", "default:stone", minp, maxp, seed+21,   1/9/9/9,    4, -31000,  -400)
 end)
