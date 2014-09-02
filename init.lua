@@ -1,5 +1,5 @@
 ---
----Titanium Mod By Aqua. Be nice this is my first mod!!! 
+---Titanium Mod Version 2 By Aqua. Be nice this is my first mod!!! 
 ---
 
 ---
@@ -10,17 +10,29 @@ minetest.register_node( "titanium:titanium_in_ground", {
 	description = "Titanium Ore",
 	tile_images = { "default_stone.png^titanium_titanium_in_ground.png" },
 	is_ground_content = true,
-	groups = {cracky=3},
+	groups = {cracky=1},
 	sounds = default.node_sound_stone_defaults(),
 	drop = 'craft "titanium:titanium" 1',
 })
 
-   minetest.register_node( "titanium:block", {
+minetest.register_node( "titanium:block", {
 	description = "Titanium Block",
 	tile_images = { "titanium_block.png" },
 	is_ground_content = true,
-	groups = {cracky=3},
+	groups = {cracky=1},
 	sounds = default.node_sound_stone_defaults(),
+})
+
+minetest.register_node("titanium:glass", {
+	description = "Titanium Glass",
+	drawtype = "glasslike",
+	tile_images = {"titanium_cleanglass.png"},
+	light_propagates = true,
+	paramtype = "light",
+	sunlight_propagates = true,
+	is_ground_content = true,
+	groups = {snappy=2,cracky=3,oddly_breakable_by_hand=3},
+	sounds = default.node_sound_glass_defaults(),
 })
 
 minetest.register_craftitem( "titanium:titanium", {
@@ -125,7 +137,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = 'titanium:block',
+	output = 'titanium:block 2',
 	recipe = {
 		{'titanium:titanium', 'titanium:titanium', 'titanium:titanium'},
 		{'titanium:titanium', 'titanium:titanium', 'titanium:titanium'},
@@ -137,6 +149,15 @@ minetest.register_craft({
 	output = 'titanium:titanium 9',
 	recipe = {
 		{'', 'titanium:block', ''},
+	}
+})
+
+minetest.register_craft({
+	output = 'titanium:glass 2',
+	recipe = {
+		{'', 'titanium:titanium', ''},
+		{'titanium:titanium', 'default:glass', 'titanium:titanium'},
+		{'', 'titanium:titanium', ''},
 	}
 })
 
@@ -181,5 +202,5 @@ local function generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, 
 end
 
 minetest.register_on_generated(function(minp, maxp, seed)
-generate_ore("titanium:titanium_in_ground", "default:stone", minp, maxp, seed+21,   1/5/5/5,    4, -31000,  -400)
+generate_ore("titanium:titanium_in_ground", "default:stone", minp, maxp, seed+21,   1/8/8/8,    4, -31000,  -400)
 end)
