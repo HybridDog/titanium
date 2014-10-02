@@ -61,7 +61,6 @@ minetest.register_node( "titanium:titanium_tv_1", {
 	tile_images = { "titanium_tv_1.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
-	drop = 'titanium:screen_1',
 	light_source = 8,
 })
 
@@ -70,26 +69,22 @@ minetest.register_node( "titanium:titanium_tv_2", {
 	tile_images = { "titanium_tv_2.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
-	drop = 'titanium:screen_1',
+	drop = 'titanium:titanium_tv_1',
 	light_source = 8,
 })
 
 minetest.register_abm(
-        {nodenames = {"titanium:titanium_tv_1", "titanium:titanium_tv_2"}, 
-        interval = 12,
-        chance = 1,
-        action = function(pos)
-		local i = math.random(1,2)
-        
-			if i== 1 then
-				minetest.env:add_node(pos,{name="titanium:titanium_tv_1"})
-			end
-		
-			if i== 2 then
-				minetest.env:add_node(pos,{name="titanium:titanium_tv_2"})
-			end
-			
-       end 
+		{nodenames = {"titanium:titanium_tv_1", "titanium:titanium_tv_2"}, 
+		interval = 12,
+		chance = 1,
+		action = function(pos, node)
+		if math.random(2) == 1
+		and node.name == "titanium:titanium_tv_2" then
+			minetest.add_node(pos,{name="titanium:titanium_tv_1"})
+		elseif node.name == "titanium:titanium_tv_1" then
+			minetest.add_node(pos,{name="titanium:titanium_tv_2"})
+		end
+	   end 
 })
 			
 ---
@@ -238,51 +233,16 @@ minetest.register_craft({
 	}
 })
 
-print("[Titanium Mod] Loaded! By Aqua! Subscribe to my YouTube: youtube.com/theshaunzero!")
-
-local function generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, ore_per_chunk, height_min, height_max)
-	if maxp.y < height_min or minp.y > height_max then
-		return
-	end
-	local y_min = math.max(minp.y, height_min)
-	local y_max = math.min(maxp.y, height_max)
-	local volume = (maxp.x-minp.x+1)*(y_max-y_min+1)*(maxp.z-minp.z+1)
-	local pr = PseudoRandom(seed)
-	local num_chunks = math.floor(chunks_per_volume * volume)
-	local chunk_size = 3
-	if ore_per_chunk <= 4 then
-		chunk_size = 2
-	end
-	local inverse_chance = math.floor(chunk_size*chunk_size*chunk_size / ore_per_chunk)
-	--print("generate_ore num_chunks: "..dump(num_chunks))
-	for i=1,num_chunks do
-		local y0 = pr:next(y_min, y_max-chunk_size+1)
-		if y0 >= height_min and y0 <= height_max then
-			local x0 = pr:next(minp.x, maxp.x-chunk_size+1)
-			local z0 = pr:next(minp.z, maxp.z-chunk_size+1)
-			local p0 = {x=x0, y=y0, z=z0}
-			for x1=0,chunk_size-1 do
-			for y1=0,chunk_size-1 do
-			for z1=0,chunk_size-1 do
-				if pr:next(1,inverse_chance) == 1 then
-					local x2 = x0+x1
-					local y2 = y0+y1
-					local z2 = z0+z1
-					local p2 = {x=x2, y=y2, z=z2}
-					if minetest.env:get_node(p2).name == wherein then
-						minetest.env:set_node(p2, {name=name})
-					end
-				end
-			end
-			end
-			end
-		end
-	end
-end
-
-minetest.register_on_generated(function(minp, maxp, seed)
-generate_ore("titanium:titanium_in_ground", "default:stone", minp, maxp, seed+21,   1/8/8/8,    2, -31000,  -1500)
-end)
+minetest.register_ore({
+	ore_type = "scatter",
+	ore = "titanium:titanium_in_ground",
+	wherein	= "default:stone",
+	clust_scarcity = 8*8*8,
+	clust_num_ores = 2,
+	clust_size = 2,
+	height_min = -31000,
+	height_max = -1500,
+})
 
 local players = {}
 local player_positions = {}
@@ -293,15 +253,16 @@ function round(num)
 end
 
 function check_for_googles (player)
-if player==nil then return false end
-local inv = player:get_inventory()
-local hotbar=inv:get_list("main")
-for index=1,8,1 do
-    if hotbar[index]:get_name() == "titanium:sam_titanium" then
-        return "titanium:sam_titanium"
-    end
-end
-return false
+	if not player then
+		return
+	end
+	local inv = player:get_inventory()
+	local hotbar=inv:get_list("main")
+	for index=1,8 do
+		if hotbar[index]:get_name() == "titanium:sam_titanium" then
+			return true
+		end
+	end
 end   
 
 minetest.register_on_joinplayer(function(player)
@@ -309,16 +270,13 @@ minetest.register_on_joinplayer(function(player)
 	table.insert(players, player_name)
 	last_wielded[player_name] = player:get_wielded_item():get_name()
 	local pos = player:getpos()
-	local rounded_pos = {x=round(pos.x),y=round(pos.y)+1,z=round(pos.z)}
-    local wielded_item = check_for_googles(player)
-	if wielded_item ~= "titanium:sam_titanium" then
-		minetest.env:add_node(rounded_pos,{type="node",name="titanium:who_knows"})
-		minetest.env:add_node(rounded_pos,{type="node",name="air"})
+	pos = vector.round(pos)
+	pos.y = pos.y+1
+	if not check_for_googles(player)
+	and minetest.get_node(pos).name == "titanium:light" then
+		minetest.remove_node(pos)
 	end
-	player_positions[player_name] = {}
-	player_positions[player_name]["x"] = rounded_pos.x;
-	player_positions[player_name]["y"] = rounded_pos.y;
-	player_positions[player_name]["z"] = rounded_pos.z;
+	player_positions[player_name] = pos
 end)
 
 minetest.register_on_leaveplayer(function(player)
@@ -327,63 +285,55 @@ minetest.register_on_leaveplayer(function(player)
 		if v == player_name then 
 			table.remove(players, i)
 			last_wielded[player_name] = nil
-			local pos = player:getpos()
-			local rounded_pos = {x=round(pos.x),y=round(pos.y)+1,z=round(pos.z)}
-			minetest.env:add_node(rounded_pos,{type="node",name="titanium:who_knows"})
-			minetest.env:add_node(rounded_pos,{type="node",name="air"})
-			player_positions[player_name]["x"] = nil
-			player_positions[player_name]["y"] = nil
-			player_positions[player_name]["z"] = nil
-			player_positions[player_name]["m"] = nil
 			player_positions[player_name] = nil
+			local pos = vector.round(player:getpos())
+			pos.y = pos.y+1
+			if minetest.get_node(pos).name == "titanium:light" then
+				minetest.remove_node(pos)
+			end
+			return
 		end
 	end
 end)
 
+local timer = 0
 minetest.register_globalstep(function(dtime)
+	timer = timer+dtime
+	if timer < 0.5 then
+		return
+	end
+	timer = 0
 	for i,player_name in ipairs(players) do
-		local player = minetest.env:get_player_by_name(player_name)
-		local wielded_item = check_for_googles(player)
-		if wielded_item == "titanium:sam_titanium" then
-			local pos = player:getpos()
-			local rounded_pos = {x=round(pos.x),y=round(pos.y)+1,z=round(pos.z)}
-			if (last_wielded[player_name] ~= "titanium:sam_titanium") or (player_positions[player_name]["x"] ~= rounded_pos.x or player_positions[player_name]["y"] ~= rounded_pos.y or player_positions[player_name]["z"] ~= rounded_pos.z) then
-				local is_air  = minetest.env:get_node_or_nil(rounded_pos)
-				if is_air == nil or (is_air ~= nil and (is_air.name == "air" or is_air.name == "titanium:light")) then
-					minetest.env:add_node(rounded_pos,{type="node",name="titanium:light"})
+		local player = minetest.get_player_by_name(player_name)
+		if check_for_googles(player) then
+			local pos = vector.round(player:getpos())
+			pos.y = pos.y+1
+			local new_pos = not vector.equals(pos, player_positions[player_name])
+			if last_wielded[player_name] ~= "titanium:sam_titanium"
+			or new_pos then
+				if minetest.get_node(pos).name == "air" then
+					minetest.add_node(pos, {name="titanium:light"})
 				end
-				if (player_positions[player_name]["x"] ~= rounded_pos.x or player_positions[player_name]["y"] ~= rounded_pos.y or player_positions[player_name]["z"] ~= rounded_pos.z) then
-					local old_pos = {x=player_positions[player_name]["x"], y=player_positions[player_name]["y"], z=player_positions[player_name]["z"]}
-					local is_light = minetest.env:get_node_or_nil(old_pos)
-					if is_light ~= nil and is_light.name == "titanium:light" then
-						minetest.env:add_node(old_pos,{type="node",name="titanium:who_knows"})
-						minetest.env:add_node(old_pos,{type="node",name="air"})
+				if new_pos then
+					local old_pos = player_positions[player_name]
+					if minetest.get_node(old_pos).name == "titanium:light" then
+						minetest.remove_node(old_pos)
 					end
 				end
-				player_positions[player_name]["x"] = rounded_pos.x
-				player_positions[player_name]["y"] = rounded_pos.y
-				player_positions[player_name]["z"] = rounded_pos.z
+				player_positions[player_name] = pos
 			end
 
 			last_wielded[player_name] = wielded_item;
 		elseif last_wielded[player_name] == "titanium:sam_titanium" then
-			local pos = player:getpos()
-			local rounded_pos = {x=round(pos.x),y=round(pos.y)+1,z=round(pos.z)}
-			repeat
-				local is_light  = minetest.env:get_node_or_nil(rounded_pos)
-				if is_light ~= nil and is_light.name == "titanium:light" then
-					minetest.env:add_node(rounded_pos,{type="node",name="titanium:who_knows"})
-					minetest.env:add_node(rounded_pos,{type="node",name="air"})
-				end
-			until minetest.env:get_node_or_nil(rounded_pos) ~= "titanium:light"
-			local old_pos = {x=player_positions[player_name]["x"], y=player_positions[player_name]["y"], z=player_positions[player_name]["z"]}
-			repeat
-				is_light  = minetest.env:get_node_or_nil(old_pos)
-				if is_light ~= nil and is_light.name == "titanium:light" then
-					minetest.env:add_node(old_pos,{type="node",name="titanium:who_knows"})
-					minetest.env:add_node(old_pos,{type="node",name="air"})
-				end
-			until minetest.env:get_node_or_nil(old_pos) ~= "titanium:light"
+			local pos = vector.round(player:getpos())
+			pos.y = pos.y+1
+			if minetest.get_node(pos).name == "titanium:light" then
+				minetest.remove_node(pos)
+			end
+			local old_pos = player_positions[player_name]
+			if minetest.get_node(old_pos).name == "titanium:light" then
+				minetest.remove_node(old_pos)
+			end
 			last_wielded[player_name] = wielded_item
 		end
 	end
@@ -403,9 +353,9 @@ minetest.register_node("titanium:light", {
 	sunlight_propagates = true,
 	light_source = 11,
 	selection_box = {
-        type = "fixed",
-        fixed = {0, 0, 0, 0, 0, 0},
-    },
+		type = "fixed",
+		fixed = {0, 0, 0, 0, 0, 0},
+	},
 })
 
 minetest.register_tool("titanium:sam_titanium", {
@@ -435,3 +385,5 @@ minetest.register_node("titanium:who_knows", {
 	is_ground_content = true,
 	groups = {not_in_creative_inventory=1},
 })
+
+print("[Titanium Mod] Loaded! By Aqua! Subscribe to my YouTube: youtube.com/theshaunzero!")
