@@ -386,4 +386,4 @@ minetest.register_node("titanium:who_knows", {
 	groups = {not_in_creative_inventory=1},
 })
 
-print("[Titanium Mod] Loaded! By Aqua! Subscribe to my YouTube: youtube.com/theshaunzero!")
+minetest.log("info", "[Titanium Mod] Loaded! By Aqua! Subscribe to my YouTube: youtube.com/theshaunzero!")
