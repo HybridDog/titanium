@@ -296,6 +296,10 @@ minetest.register_on_leaveplayer(function(player)
 	end
 end)
 
+local function dark_enough(pos)
+	return (minetest.get_node_light(pos) or 0) < 11
+end
+
 local timer = 0
 minetest.register_globalstep(function(dtime)
 	timer = timer+dtime
@@ -311,7 +315,7 @@ minetest.register_globalstep(function(dtime)
 			local new_pos = not vector.equals(pos, player_positions[player_name])
 			if last_wielded[player_name] ~= "titanium:sam_titanium"
 			or new_pos then
-				if minetest.get_node_light(pos) < 11
+				if dark_enough(pos)
 				and minetest.get_node(pos).name == "air" then
 					minetest.add_node(pos, {name="titanium:light"})
 				end
