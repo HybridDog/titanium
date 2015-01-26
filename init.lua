@@ -355,6 +355,7 @@ minetest.register_node("titanium:light", {
 	drop = "",
 	light_source = 11,
 	pointable = false,
+	buildable_to = true,
 })
 
 minetest.register_tool("titanium:sam_titanium", {
