@@ -8,7 +8,7 @@
 
 minetest.register_node( "titanium:titanium_in_ground", {
 	description = "Titanium Ore",
-	tile_images = { "default_stone.png^titanium_titanium_in_ground.png" },
+	tiles = { "default_stone.png^titanium_titanium_in_ground.png" },
 	is_ground_content = true,
 	groups = {cracky=1},
 	sounds = default.node_sound_stone_defaults(),
@@ -17,7 +17,7 @@ minetest.register_node( "titanium:titanium_in_ground", {
 
 minetest.register_node( "titanium:block", {
 	description = "Titanium Block",
-	tile_images = { "titanium_block.png" },
+	tiles = { "titanium_block.png" },
 	is_ground_content = true,
 	groups = {cracky=1},
 	sounds = default.node_sound_stone_defaults(),
@@ -26,7 +26,7 @@ minetest.register_node( "titanium:block", {
 minetest.register_node("titanium:glass", {
 	description = "Titanium Glass",
 	drawtype = "glasslike",
-	tile_images = {"titanium_glass.png"},
+	tiles = {"titanium_glass.png"},
 	light_propagates = true,
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -49,7 +49,7 @@ minetest.register_craftitem( "titanium:tougher_titanium", {
 
 minetest.register_node( "titanium:titanium_plate", {
 	description = "Titanium Plate",
-	tile_images = {"titanium_plate.png"},
+	tiles = {"titanium_plate.png"},
 	inventory_image = "titanium_plate.png",
 	is_ground_content = true,
 	groups = {cracky=1},
@@ -58,7 +58,7 @@ minetest.register_node( "titanium:titanium_plate", {
 
 minetest.register_node( "titanium:titanium_tv_1", {
 	description = "Titanium TV",
-	tile_images = { "titanium_tv_1.png" },
+	tiles = { "titanium_tv_1.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
 	light_source = 8,
@@ -66,7 +66,7 @@ minetest.register_node( "titanium:titanium_tv_1", {
 
 minetest.register_node( "titanium:titanium_tv_2", {
 	description = "Titanium TV",
-	tile_images = { "titanium_tv_2.png" },
+	tiles = { "titanium_tv_2.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
 	drop = 'titanium:titanium_tv_1',
@@ -74,7 +74,7 @@ minetest.register_node( "titanium:titanium_tv_2", {
 })
 
 minetest.register_abm(
-		{nodenames = {"titanium:titanium_tv_1", "titanium:titanium_tv_2"}, 
+		{nodenames = {"titanium:titanium_tv_1", "titanium:titanium_tv_2"},
 		interval = 12,
 		chance = 1,
 		action = function(pos, node)
@@ -84,9 +84,9 @@ minetest.register_abm(
 		elseif node.name == "titanium:titanium_tv_1" then
 			minetest.add_node(pos,{name="titanium:titanium_tv_2"})
 		end
-	   end 
+	   end
 })
-			
+
 ---
 ---tools
 ---
@@ -127,7 +127,7 @@ minetest.register_tool("titanium:shovel", {
 		}
 	},
 })
-	
+
 	minetest.register_tool("titanium:pick", {
 	description = "Titanium Pickaxe",
 	inventory_image = "titanium_pick.png",
@@ -248,8 +248,8 @@ local players = {}
 local player_positions = {}
 local last_wielded = {}
 
-function round(num) 
-	return math.floor(num + 0.5) 
+function round(num)
+	return math.floor(num + 0.5)
 end
 
 function check_for_googles (player)
@@ -263,7 +263,7 @@ function check_for_googles (player)
 			return true
 		end
 	end
-end   
+end
 
 minetest.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
@@ -282,7 +282,7 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	local player_name = player:get_player_name()
 	for i,v in pairs(players) do
-		if v == player_name then 
+		if v == player_name then
 			table.remove(players, i)
 			last_wielded[player_name] = nil
 			player_positions[player_name] = nil
