@@ -27,7 +27,6 @@ minetest.register_node("titanium:glass", {
 	description = "Titanium Glass",
 	drawtype = "glasslike",
 	tiles = {"titanium_glass.png"},
-	light_propagates = true,
 	paramtype = "light",
 	sunlight_propagates = true,
 	is_ground_content = true,
@@ -240,8 +239,8 @@ minetest.register_ore({
 	clust_scarcity = 8*8*8,
 	clust_num_ores = 2,
 	clust_size = 2,
-	height_min = -31000,
-	height_max = -1500,
+	y_min = -31000,
+	y_max = -1500,
 })
 
 local players = {}
@@ -350,7 +349,6 @@ end)
 minetest.register_node("titanium:light", {
 	drawtype = "airlike",
 	walkable = false,
-	light_propagates = true,
 	sunlight_propagates = true,
 	drop = "",
 	light_source = 11,
