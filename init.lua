@@ -295,13 +295,7 @@ local function dark_enough(pos)
 	return (minetest.get_node_light(pos) or 0) < 11
 end
 
-local timer = 0
-minetest.register_globalstep(function(dtime)
-	timer = timer+dtime
-	if timer < 0.5 then
-		return
-	end
-	timer = 0
+local function do_step()
 	for i,player_name in pairs(players) do
 		local player = minetest.get_player_by_name(player_name)
 		if check_for_googles(player) then
@@ -337,7 +331,14 @@ minetest.register_globalstep(function(dtime)
 			last_wielded[player_name] = wielded_item
 		end
 	end
-end)
+end
+
+local function continue_steps()
+	do_step()
+	minetest.delay_function(3, continue_steps)
+end
+continue_steps()
+
 
 --------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------Version 4-----------------------------------------------------------------------
