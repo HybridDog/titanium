@@ -333,11 +333,15 @@ local function do_step()
 	end
 end
 
-local function continue_steps()
+local timer = 0
+minetest.register_globalstep(function(dtime)
+	timer = timer+dtime
+	if timer < 0.5 then
+		return
+	end
+	timer = 0
 	do_step()
-	minetest.delay_function(3, continue_steps)
-end
-continue_steps()
+end)
 
 
 --------------------------------------------------------------------------------------------------------------------------------------
