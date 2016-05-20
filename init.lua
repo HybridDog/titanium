@@ -331,18 +331,12 @@ local function do_step()
 			last_wielded[player_name] = wielded_item
 		end
 	end
+	minetest.after(0.03, function()
+		minetest.delay_function(0.5, do_step)
+	end)
 end
 
-local timer = 0
-minetest.register_globalstep(function(dtime)
-	timer = timer+dtime
-	if timer < 0.5 then
-		return
-	end
-	timer = 0
-	do_step()
-end)
-
+do_step()
 
 --------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------Version 4-----------------------------------------------------------------------
