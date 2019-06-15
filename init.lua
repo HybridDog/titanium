@@ -13,7 +13,7 @@ end
 
 minetest.register_node( "titanium:titanium_in_ground", {
 	description = "Titanium Ore",
-	tile_images = { "default_stone.png^titanium_titanium_in_ground.png" },
+	tiles  = { "default_stone.png^titanium_titanium_in_ground.png" },
 	is_ground_content = true,
 	groups = {cracky=1},
 	sounds = default.node_sound_stone_defaults(),
@@ -22,7 +22,7 @@ minetest.register_node( "titanium:titanium_in_ground", {
 
 minetest.register_node( "titanium:block", {
 	description = "Titanium Block",
-	tile_images = { "titanium_block.png" },
+	tiles  = { "titanium_block.png" },
 	is_ground_content = true,
 	groups = {cracky=1},
 	sounds = default.node_sound_stone_defaults(),
@@ -31,7 +31,7 @@ minetest.register_node( "titanium:block", {
 minetest.register_node("titanium:glass", {
 	description = "Titanium Glass",
 	drawtype = "glasslike",
-	tile_images = {"titanium_glass.png"},
+	tiles  = {"titanium_glass.png"},
 	paramtype = "light",
 	sunlight_propagates = true,
 	is_ground_content = true,
@@ -53,7 +53,7 @@ minetest.register_craftitem( "titanium:tougher_titanium", {
 
 minetest.register_node( "titanium:titanium_plate", {
 	description = "Titanium Plate",
-	tile_images = {"titanium_plate.png"},
+	tiles  = {"titanium_plate.png"},
 	inventory_image = "titanium_plate.png",
 	is_ground_content = true,
 	groups = {cracky=1},
@@ -62,7 +62,7 @@ minetest.register_node( "titanium:titanium_plate", {
 
 minetest.register_node( "titanium:titanium_tv_1", {
 	description = "Titanium TV",
-	tile_images = { "titanium_tv_1.png" },
+	tiles  = { "titanium_tv_1.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
 	drop = 'titanium:titanium_tv_1',
@@ -71,7 +71,7 @@ minetest.register_node( "titanium:titanium_tv_1", {
 
 minetest.register_node( "titanium:titanium_tv_2", {
 	description = "Titanium TV",
-	tile_images = { "titanium_tv_2.png" },
+	tiles  = { "titanium_tv_2.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
 	drop = 'titanium:titanium_tv_1',
@@ -371,7 +371,7 @@ if enable_walking_light then
 
 	minetest.register_node("titanium:light", {
 		drawtype = "glasslike",
-		tile_images = {"titanium.png"},
+		tiles  = {"titanium.png"},
 		inventory_image = minetest.inventorycube("titanium.png"),
 		paramtype = "light",
 		walkable = false,
