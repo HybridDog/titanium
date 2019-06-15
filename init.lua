@@ -377,6 +377,7 @@ if enable_walking_light then
 		walkable = false,
 		is_ground_content = true,
 		sunlight_propagates = true,
+		buildable_to = true,
 		light_source = 11,
 		selection_box = {
 			type = "fixed",
