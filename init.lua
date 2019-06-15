@@ -32,7 +32,6 @@ minetest.register_node("titanium:glass", {
 	description = "Titanium Glass",
 	drawtype = "glasslike",
 	tile_images = {"titanium_glass.png"},
-	light_propagates = true,
 	paramtype = "light",
 	sunlight_propagates = true,
 	is_ground_content = true,
@@ -380,7 +379,6 @@ if enable_walking_light then
 		paramtype = "light",
 		walkable = false,
 		is_ground_content = true,
-		light_propagates = true,
 		sunlight_propagates = true,
 		light_source = 11,
 		selection_box = {
