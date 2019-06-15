@@ -65,7 +65,7 @@ minetest.register_node( "titanium:titanium_tv_1", {
 	tile_images = { "titanium_tv_1.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
-	drop = 'titanium:screen_1',
+	drop = 'titanium:titanium_tv_1',
 	light_source = 8,
 })
 
@@ -74,7 +74,7 @@ minetest.register_node( "titanium:titanium_tv_2", {
 	tile_images = { "titanium_tv_2.png" },
 	is_ground_content = true,
 	groups = {snappy=1,bendy=2,cracky=1,melty=2,level=2},
-	drop = 'titanium:screen_1',
+	drop = 'titanium:titanium_tv_1',
 	light_source = 8,
 })
 
