@@ -83,6 +83,7 @@ minetest.register_abm(
         {nodenames = {"titanium:titanium_tv_1", "titanium:titanium_tv_2"}, 
         interval = 12,
         chance = 1,
+		catch_up = false,
         action = function(pos)
 		local i = math.random(1,2)
         
