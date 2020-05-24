@@ -113,8 +113,8 @@ minetest.register_tool("titanium:axe", {
 		max_drop_level=1,
 		groupcaps={
 			choppy={times={[1]=2.50, [2]=1.50, [3]=1.00}, uses=150, maxlevel=2},
-			fleshy={times={[2]=1.00, [3]=0.50}, uses=120, maxlevel=1}
-		}
+		},
+		damage_groups = {fleshy=4},
 	},
 })
 
@@ -125,7 +125,8 @@ minetest.register_tool("titanium:shovel", {
 		max_drop_level=1,
 		groupcaps={
 			crumbly={times={[1]=1.0, [2]=0.50, [3]=0.50}, uses=150, maxlevel=3}
-		}
+		},
+		damage_groups = {fleshy=3},
 	},
 })
 
@@ -139,9 +140,11 @@ minetest.register_tool("titanium:pick", {
 			cracky={times={[1]=2.4, [2]=1.0, [3]=0.6}, uses=160, maxlevel=3},
 			crumbly={times={[1]=2.4, [2]=1.0, [3]=0.6}, uses=160, maxlevel=3},
 			snappy={times={[1]=2.4, [2]=1.0, [3]=0.6}, uses=160, maxlevel=3}
-		}
+		},
+		damage_groups = {fleshy=4},
 	},
 })
+
 
 ---
 ---crafting
