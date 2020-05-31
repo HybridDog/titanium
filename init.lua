@@ -306,13 +306,7 @@ if enable_walking_light then
 		end
 	end)
 
-	local timer = 0
-	minetest.register_globalstep(function(dtime)
-		timer = timer + dtime
-		if timer < 0.5 then
-			return
-		end
-		timer = 0
+	local function do_step()
 		for i,player_name in ipairs(players) do
 			local player = minetest.get_player_by_name(player_name)
 			if check_for_googles(player) then
@@ -348,7 +342,13 @@ if enable_walking_light then
 				last_wielded[player_name] = wielded_item
 			end
 		end
-	end)
+	end
+
+	local function continue_steps()
+		do_step()
+		minetest.after(0.03, minetest.delay_function, 3, continue_steps)
+	end
+	continue_steps()
 
 	------------------------------------------------------
 	-- Version 4------------------------------------------
