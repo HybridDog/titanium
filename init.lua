@@ -326,7 +326,8 @@ if enable_walking_light then
 				local new_pos = not vector.equals(pos, player_positions[player_name])
 				if last_wielded[player_name] ~= "titanium:sam_titanium"
 				or new_pos then
-					if minetest.get_node(pos).name == "air" then
+					if minetest.get_node_light(pos) < 11
+					and minetest.get_node(pos).name == "air" then
 						minetest.add_node(pos, {name="titanium:light"})
 					end
 					if new_pos then
@@ -358,19 +359,13 @@ if enable_walking_light then
 	-- Version 4------------------------------------------
 
 	minetest.register_node("titanium:light", {
-		drawtype = "glasslike",
-		tiles  = {"titanium.png"},
-		inventory_image = minetest.inventorycube("titanium.png"),
-		paramtype = "light",
+		drawtype = "airlike",
 		walkable = false,
-		is_ground_content = true,
 		sunlight_propagates = true,
 		buildable_to = true,
+		pointable = false,
+		drop = "",
 		light_source = 11,
-		selection_box = {
-			type = "fixed",
-			fixed = {0, 0, 0, 0, 0, 0},
-		},
 	})
 
 	minetest.register_tool("titanium:sam_titanium", {
@@ -380,7 +375,7 @@ if enable_walking_light then
 		tool_capabilities = {
 			max_drop_level=1,
 			groupcaps={
-					cracky={times={[2]=1.20, [3]=0.80}, uses=5, maxlevel=1}
+				cracky={times={[2]=1.20, [3]=0.80}, uses=5, maxlevel=1}
 			}
 		},
 	})
@@ -390,16 +385,10 @@ if enable_walking_light then
 		recipe = {
 			{'titanium:titanium_plate', 'default:torch', 'titanium:titanium_plate'},
 			{'titanium:glass', 'default:mese_crystal', 'titanium:glass'},
-			{'', '', ''},
 		}
 	})
 	--------------------------------------------------------
-	minetest.register_node("titanium:who_knows", {
-		description = "?Who Knows?",
-		tiles = {"titanium.png"},
-		is_ground_content = true,
-		groups = {not_in_creative_inventory=1},
-	})
+	minetest.register_alias("titanium:who_knows", "air")
 end
 
 minetest.log("info", "[Titanium Mod] Loaded! By Aqua! Subscribe to my YouTube: youtube.com/theshaunzero!")
