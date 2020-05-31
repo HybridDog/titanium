@@ -326,7 +326,7 @@ if enable_walking_light then
 				local new_pos = not vector.equals(pos, player_positions[player_name])
 				if last_wielded[player_name] ~= "titanium:sam_titanium"
 				or new_pos then
-					if minetest.get_node_light(pos) < 11
+					if (minetest.get_node_light(pos) or 0) < 11
 					and minetest.get_node(pos).name == "air" then
 						minetest.add_node(pos, {name="titanium:light"})
 					end
