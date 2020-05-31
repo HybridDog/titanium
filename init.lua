@@ -259,18 +259,13 @@ if enable_walking_light then
 	local player_positions = {}
 	local last_wielded = {}
 
-	function round(num)
-		return math.floor(num + 0.5)
-	end
-
-	function check_for_googles(player)
+	local function check_for_googles(player)
 		if not player then
 			return
 		end
-		local inv = player:get_inventory()
-		local hotbar = inv:get_list("main")
-		for index = 1,8 do
-			if hotbar[index]:get_name() == "titanium:sam_titanium" then
+		local hotbar = player:get_inventory():get_list("main")
+		for i = 1, player:hud_get_hotbar_itemcount() do
+			if hotbar[i]:get_name() == "titanium:sam_titanium" then
 				return true
 			end
 		end
@@ -278,7 +273,7 @@ if enable_walking_light then
 
 	minetest.register_on_joinplayer(function(player)
 		local player_name = player:get_player_name()
-		table.insert(players, player_name)
+		players[#players+1] = player_name
 		last_wielded[player_name] = player:get_wielded_item():get_name()
 		local pos = vector.round(player:getpos())
 		pos.y = pos.y+1
