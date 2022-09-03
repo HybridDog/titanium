@@ -382,4 +382,15 @@ if enable_walking_light then
 	minetest.register_alias("titanium:who_knows", "air")
 end
 
+-- Cleanup for leftover and player-placed titanium lights
+minetest.register_lbm({
+	label = "Titanium light cleanup",
+	name = "titanium:light_cleanup",
+	nodenames = {"titanium:light"},
+	run_at_every_load = true,
+	action = function(pos)
+		minetest.set_node(pos, {name = "air"})
+	end,
+})
+
 minetest.log("info", "[Titanium Mod] Loaded! By Aqua! Subscribe to my YouTube: youtube.com/theshaunzero!")
